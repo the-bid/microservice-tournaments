@@ -1,0 +1,42 @@
+type Query {
+  tournament(year:Int!):Tournament
+}
+
+type Tournament @cacheControl(maxAge: 3000000){
+  id: ID!
+  name: String!
+  status: TournamentStatus!
+  startDate: Date!
+  endDate: Date!
+  brackets: [Bracket!]!
+}
+
+enum TournamentStatus @cacheControl(maxAge: 3000000){
+  CLOSED
+  IN_PROGRESS
+}
+
+type Bracket @cacheControl(maxAge: 3000000){
+  id: ID!
+  name: String!
+  teams: [Team!]!
+}
+
+type Team @cacheControl(maxAge: 3000000){
+  id: ID!
+  name: String!
+  school: String!
+  seed: Int!
+}
+
+directive @cacheControl(
+  maxAge: Int,
+  scope: CacheControlScope
+) on OBJECT | FIELD_DEFINITION
+
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+scalar Date
