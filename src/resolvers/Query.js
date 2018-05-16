@@ -4,12 +4,11 @@ module.exports = {
   tournament
 }
 
-async function tournament(root, { year }, context, info) {
-  const { sportsRadar } = context
+async function tournament(root, { year }, { sportsRadar }, info) {
   const tournaments = await sportsRadar.getTournaments(year)
   const { id } = tournaments.find(tournament => {
     return tournament.name.toLowerCase().includes('division i')
   })
-  await sleep(1000) //TODO:REMOVE once this gets real
+  await sleep(1000) //FIXME:REMOVE once this gets real
   return await sportsRadar.getTournament(id)
 }

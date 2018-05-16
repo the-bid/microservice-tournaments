@@ -1,6 +1,6 @@
 const { GraphQLServer } = require('graphql-yoga')
 const { ApolloEngine } = require('apollo-engine')
-const Query = require('./resolvers/Query')
+const Query = process.env.NODE_ENV === 'production' ? require('./resolvers/Query') : require('./mock-resolvers/Query')
 const Tournament = require('./resolvers/Tournament')
 const Team = require('./resolvers/Team')
 const TournamentStatus = require('./resolvers/TournamentStatus')

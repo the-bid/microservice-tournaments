@@ -1,7 +1,9 @@
+const { sortBy } = require('lodash')
+
 module.exports = {
   teams
 }
 
 function teams(root) {
-  return root.participants
+  return sortBy(root.participants, ['seed'])
 }
