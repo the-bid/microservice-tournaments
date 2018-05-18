@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint . --fix --ignore-path .gitignore --ignore-pattern '!.eslintrc.js'",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run lint && npm run unit",
+    "unit": "jest",
+    "coverage":"jest --coverage",
     "start": "nodemon -r dotenv/config src/index.js",
     "start:dev": "npm-run-all -pl start playground ",
     "start:prod": "node src/index.js",
@@ -21,6 +23,7 @@
     "lodash": "^4.17.10"
   },
   "devDependencies": {
+    "casual": "^1.5.19",
     "dotenv": "^5.0.1",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
