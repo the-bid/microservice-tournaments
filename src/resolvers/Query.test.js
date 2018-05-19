@@ -2,7 +2,6 @@ const { year } = require('casual')
 const { tournament } = require('./Query')
 const MockTournament = require('../mock-data/Tournament')
 const MockBracket = require('../mock-data/Bracket')
-const BRACKETS = 4
 
 jest.mock('util', () => ({
   promisify: jest.fn(() => {
@@ -14,7 +13,7 @@ describe('Query', () => {
   describe('tournament', () => {
     const context = {}
     beforeEach(() => {
-      const tournamentsData = Array.from(new Array(BRACKETS - 1), () => new MockTournament())
+      const tournamentsData = Array.from(new Array(3), () => new MockTournament())
       tournamentsData.push(new MockTournament('NCAA Mens Division I Tournament'))
       context.sportsRadar = {
         getTournaments: jest.fn(() => tournamentsData),
@@ -32,7 +31,7 @@ describe('Query', () => {
       expect(getTournament).toBeCalledWith(expect.any(String))
     })
     test('tournament returns a Tournament object', async () => {
-      expect.assertions(BRACKETS + 1)
+      expect.hasAssertions()
       const result = await tournament({}, { year }, context)
       expect(result).toEqual(
         expect.objectContaining({
