@@ -1,6 +1,6 @@
 const { teams } = require('./Bracket')
-const MockBracket = require('../mock-data/Bracket')
-const MockTeam = require('../mock-data/Team')
+const MockBracket = require('../../test/mock-data/Bracket')
+const MockTeam = require('../../test/mock-data/Team')
 /* eslint-disable security/detect-object-injection */
 describe('Bracket', () => {
   let Bracket = null

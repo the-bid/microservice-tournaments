@@ -44,7 +44,7 @@
   },
   "jest": {
     "coveragePathIgnorePatterns": [
-      "<rootDir>/src/mock-resolvers",
+      "<rootDir>/test",
       "<rootDir>/src/mock-data"
     ]
   }

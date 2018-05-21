@@ -2,6 +2,7 @@ const { makeExecutableSchema, addMockFunctionsToSchema } = require('graphql-tool
 const { graphql } = require('graphql')
 const { importSchema } = require('graphql-import')
 const { date, year } = require('casual')
+const { tournamentObjectTemplate, bracketObjectTemplate, teamObjectTemplate } = require('../../test/utils')
 
 describe('Schema', () => {
   let schema = null
@@ -22,7 +23,7 @@ describe('Schema', () => {
   describe('Query', () => {
     describe('tournament', () => {
       test('returns a tournament', async () => {
-        expect.hasAssertions()
+        expect.assertions(1)
         const query = `query tournament{
           tournament(year: ${year}){
             id
@@ -30,16 +31,13 @@ describe('Schema', () => {
             status
             startDate
             endDate
+            brackets{
+              id
+            }
           }
         }`
         const { data } = await graphql(schema, query)
-        expect(data.tournament).toMatchObject({
-          id: expect.any(String),
-          name: expect.any(String),
-          status: expect.any(String),
-          startDate: expect.any(String),
-          endDate: expect.any(String)
-        })
+        expect(data.tournament).toMatchObject(tournamentObjectTemplate)
       })
       test('tournament contains a list of brackets', async () => {
         expect.hasAssertions()
@@ -48,18 +46,15 @@ describe('Schema', () => {
             brackets{
               id
               name
+              teams{
+                id
+              }
             }
           }
         }`
         const { data } = await graphql(schema, query)
-        expect(data.tournament).toMatchObject({
-          brackets: expect.any(Array)
-        })
         data.tournament.brackets.forEach(bracket => {
-          expect(bracket).toMatchObject({
-            id: expect.any(String),
-            name: expect.any(String)
-          })
+          expect(bracket).toMatchObject(bracketObjectTemplate)
         })
       })
       test('tournament brackets contain a list of teams', async () => {
@@ -78,16 +73,8 @@ describe('Schema', () => {
         }`
         const { data } = await graphql(schema, query)
         data.tournament.brackets.forEach(bracket => {
-          expect(bracket).toMatchObject({
-            teams: expect.any(Array)
-          })
           bracket.teams.forEach(team => {
-            expect(team).toMatchObject({
-              id: expect.any(String),
-              name: expect.any(String),
-              school: expect.any(String),
-              seed: expect.any(Number)
-            })
+            expect(team).toMatchObject(teamObjectTemplate)
           })
         })
       })

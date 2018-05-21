@@ -1,7 +1,7 @@
 const { year } = require('casual')
 const { tournament } = require('./Query')
-const MockTournament = require('../mock-data/Tournament')
-const MockBracket = require('../mock-data/Bracket')
+const MockTournament = require('../../test/mock-data/Tournament')
+const MockBracket = require('../../test/mock-data/Bracket')
 
 jest.mock('util', () => ({
   promisify: jest.fn(() => {
@@ -33,15 +33,7 @@ describe('Query', () => {
     test('tournament returns a Tournament object', async () => {
       expect.hasAssertions()
       const result = await tournament({}, { year }, context)
-      expect(result).toEqual(
-        expect.objectContaining({
-          id: expect.any(String),
-          start_date: expect.any(String),
-          end_date: expect.any(String),
-          status: expect.any(String),
-          brackets: expect.any(Array)
-        })
-      )
+      expect(result).toBeInstanceOf(MockTournament)
       result.brackets.forEach(bracket => {
         expect(bracket).toBeInstanceOf(MockBracket)
       })
