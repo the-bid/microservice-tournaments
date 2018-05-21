@@ -1,7 +1,7 @@
 const { makeExecutableSchema, addMockFunctionsToSchema } = require('graphql-tools')
 const { graphql } = require('graphql')
 const { importSchema } = require('graphql-import')
-const { moment, year } = require('casual')
+const { date, year } = require('casual')
 
 describe('Schema', () => {
   let schema = null
@@ -12,7 +12,7 @@ describe('Schema', () => {
       schema,
       mocks: {
         //FIXME: I don't think this is the right way to do it
-        Date: () => moment.toISOString()
+        Date: () => date('YYYY-MM-DD')
       }
     })
   })
