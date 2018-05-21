@@ -1,7 +1,7 @@
 const { makeExecutableSchema, addMockFunctionsToSchema } = require('graphql-tools')
 const { graphql } = require('graphql')
 const { importSchema } = require('graphql-import')
-const { date, year } = require('casual')
+const { moment, year } = require('casual')
 
 describe('Schema', () => {
   let schema = null
@@ -12,7 +12,7 @@ describe('Schema', () => {
       schema,
       mocks: {
         //FIXME: I don't think this is the right way to do it
-        Date: () => new Date(date('YYYY-MM-DD')).getTime()
+        Date: () => moment.toISOString()
       }
     })
   })
@@ -37,8 +37,8 @@ describe('Schema', () => {
           id: expect.any(String),
           name: expect.any(String),
           status: expect.any(String),
-          startDate: expect.any(Number),
-          endDate: expect.any(Number)
+          startDate: expect.any(String),
+          endDate: expect.any(String)
         })
       })
       test('tournament contains a list of brackets', async () => {

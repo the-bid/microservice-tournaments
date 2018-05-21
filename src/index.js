@@ -1,17 +1,17 @@
 const { GraphQLServer } = require('graphql-yoga')
 const { ApolloEngine } = require('apollo-engine')
+const { GraphQLDateTime: DateTime } = require('graphql-iso-date')
 const Query = process.env.NODE_ENV === 'production' ? require('./resolvers/Query') : require('./mock-resolvers/Query')
 const Tournament = require('./resolvers/Tournament')
 const Team = require('./resolvers/Team')
 const TournamentStatus = require('./resolvers/TournamentStatus')
 const Bracket = require('./resolvers/Bracket')
-const Date = require('./resolvers/Date')
 const { PORT, APOLLO_ENGINE_API_KEY } = require('../config')
 const sportsRadar = require('./services/sports-radar')
 
 const resolvers = {
   Bracket,
-  Date,
+  DateTime,
   Query,
   Tournament,
   TournamentStatus,
