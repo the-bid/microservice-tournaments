@@ -1,15 +1,13 @@
 const { makeExecutableSchema, addMockFunctionsToSchema } = require('graphql-tools')
 const { graphql } = require('graphql')
 const { importSchema } = require('graphql-import')
-const { date } = require('casual')
+const { date, year } = require('casual')
 
 describe('Schema', () => {
   let schema = null
   beforeAll(() => {
-    const typeDefs = importSchema(__dirname + '/schema.graphql')
-    schema = makeExecutableSchema({
-      typeDefs
-    })
+    const typeDefs = importSchema(`${__dirname}/schema.graphql`)
+    schema = makeExecutableSchema({ typeDefs })
     addMockFunctionsToSchema({
       schema,
       mocks: {
@@ -26,7 +24,7 @@ describe('Schema', () => {
       test('returns a tournament', async () => {
         expect.hasAssertions()
         const query = `query tournament{
-          tournament(year: 2018){
+          tournament(year: ${year}){
             id
             name
             status
@@ -46,7 +44,7 @@ describe('Schema', () => {
       test('tournament contains a list of brackets', async () => {
         expect.hasAssertions()
         const query = `query tournament{
-          tournament(year: 2018){
+          tournament(year: ${year}){
             brackets{
               id
               name
@@ -67,7 +65,7 @@ describe('Schema', () => {
       test('tournament brackets contain a list of teams', async () => {
         expect.hasAssertions()
         const query = `query tournament{
-          tournament(year: 2018){
+          tournament(year: ${year}){
             brackets{
               teams{
                 id
@@ -93,6 +91,28 @@ describe('Schema', () => {
           })
         })
       })
+      test('returns a GraphQLError for unknown query property', async () => {
+        expect.assertions(2)
+        const query = `query tournament{
+          tournament(year: ${year}){
+            unknown
+          }
+        }`
+        const result = await graphql(schema, query)
+        expect(result).toHaveProperty('errors')
+        expect(result.errors[0]).toHaveProperty('message', 'Cannot query field "unknown" on type "Tournament".')
+      })
+    })
+    test('returns a GraphQLError for unknown query', async () => {
+      expect.assertions(2)
+      const query = `query unknown{
+        unknown{
+          id
+        }
+      }`
+      const result = await graphql(schema, query)
+      expect(result).toHaveProperty('errors')
+      expect(result.errors[0]).toHaveProperty('message', 'Cannot query field "unknown" on type "Query".')
     })
   })
 })
