@@ -1,8 +1,13 @@
 const { makeExecutableSchema, addMockFunctionsToSchema } = require('graphql-tools')
 const { graphql } = require('graphql')
 const { importSchema } = require('graphql-import')
-const { date, year } = require('casual')
-const { tournamentObjectTemplate, bracketObjectTemplate, teamObjectTemplate } = require('../../test/utils')
+const casual = require('casual')
+const {
+  tournamentObjectTemplate,
+  bracketObjectTemplate,
+  teamObjectTemplate,
+  missingFieldErrorMessage
+} = require('../../test/object-templates')
 
 describe('Schema', () => {
   let schema = null
@@ -12,8 +17,7 @@ describe('Schema', () => {
     addMockFunctionsToSchema({
       schema,
       mocks: {
-        //FIXME: I don't think this is the right way to do it
-        Date: () => date('YYYY-MM-DD')
+        Date: () => casual.date('YYYY-MM-DD')
       }
     })
   })
@@ -25,7 +29,7 @@ describe('Schema', () => {
       test('returns a tournament', async () => {
         expect.assertions(1)
         const query = `query tournament{
-          tournament(year: ${year}){
+          tournament(year: ${casual.year}){
             id
             name
             status
@@ -42,7 +46,7 @@ describe('Schema', () => {
       test('tournament contains a list of brackets', async () => {
         expect.hasAssertions()
         const query = `query tournament{
-          tournament(year: ${year}){
+          tournament(year: ${casual.year}){
             brackets{
               id
               name
@@ -60,7 +64,7 @@ describe('Schema', () => {
       test('tournament brackets contain a list of teams', async () => {
         expect.hasAssertions()
         const query = `query tournament{
-          tournament(year: ${year}){
+          tournament(year: ${casual.year}){
             brackets{
               teams{
                 id
@@ -78,28 +82,28 @@ describe('Schema', () => {
           })
         })
       })
-      test('returns a GraphQLError for unknown query property', async () => {
-        expect.assertions(2)
+      test('returns a GraphQLError for missing id field', async () => {
+        expect.assertions(1)
         const query = `query tournament{
-          tournament(year: ${year}){
-            unknown
+          tournament{
+            brackets{
+              teams{
+                id
+                name
+                school
+                seed
+              }
+            }
           }
         }`
         const result = await graphql(schema, query)
-        expect(result).toHaveProperty('errors')
-        expect(result.errors[0]).toHaveProperty('message', 'Cannot query field "unknown" on type "Tournament".')
+        expect(result).toHaveProperty(
+          'errors',
+          expect.arrayContaining([
+            expect.objectContaining(missingFieldErrorMessage({ method: 'tournament', field: 'year', type: 'Int' }))
+          ])
+        )
       })
-    })
-    test('returns a GraphQLError for unknown query', async () => {
-      expect.assertions(2)
-      const query = `query unknown{
-        unknown{
-          id
-        }
-      }`
-      const result = await graphql(schema, query)
-      expect(result).toHaveProperty('errors')
-      expect(result.errors[0]).toHaveProperty('message', 'Cannot query field "unknown" on type "Query".')
     })
   })
 })

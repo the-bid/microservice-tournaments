@@ -20,4 +20,10 @@ const teamObjectTemplate = {
   seed: expect.any(Number)
 }
 
-module.exports = { tournamentObjectTemplate, bracketObjectTemplate, teamObjectTemplate }
+function missingFieldErrorMessage({ method, field, type }) {
+  return {
+    message: `Field "${method}" argument "${field}" of type "${type}!" is required but not provided.`
+  }
+}
+
+module.exports = { tournamentObjectTemplate, bracketObjectTemplate, teamObjectTemplate, missingFieldErrorMessage }

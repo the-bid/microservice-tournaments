@@ -1,4 +1,4 @@
-const { year } = require('casual')
+const casual = require('casual')
 const { tournament } = require('./Query')
 const MockTournament = require('../../test/mock-data/Tournament')
 const MockBracket = require('../../test/mock-data/Bracket')
@@ -25,6 +25,7 @@ describe('Query', () => {
     })
     test('tournament calls getTournaments and getTournament', async () => {
       expect.assertions(2)
+      const year = casual.year
       const { getTournament, getTournaments } = context.sportsRadar
       await tournament({}, { year }, context)
       expect(getTournaments).toBeCalledWith(year)
@@ -32,7 +33,7 @@ describe('Query', () => {
     })
     test('tournament returns a Tournament object', async () => {
       expect.hasAssertions()
-      const result = await tournament({}, { year }, context)
+      const result = await tournament({}, { year: casual.year }, context)
       expect(result).toBeInstanceOf(MockTournament)
       result.brackets.forEach(bracket => {
         expect(bracket).toBeInstanceOf(MockBracket)
