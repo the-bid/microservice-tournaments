@@ -1,9 +1,15 @@
 module.exports = {
-  tournament
+  tournament,
+  team
 }
 
 function tournament() {
   return tournamentData
+}
+
+function team(root, { id }) {
+  const teams = tournamentData.brackets.reduce((accumulator, bracket) => accumulator.concat(bracket.participants), [])
+  return teams.find(team => team.id === id)
 }
 
 const tournamentData = {

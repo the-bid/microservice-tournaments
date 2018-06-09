@@ -3,7 +3,8 @@ const { SPORTS_RADAR_URL, SPORTS_RADAR_API_KEY } = require('../../config')
 
 module.exports = {
   getTournaments,
-  getTournament
+  getTournament,
+  getTeam
 }
 
 const sportsRadar = axios.create({
@@ -22,5 +23,10 @@ async function getTournaments(year) {
 
 async function getTournament(id) {
   const { data } = await sportsRadar.get(`tournaments/${id}/summary.json`)
+  return data
+}
+
+async function getTeam(id) {
+  const { data } = await sportsRadar.get(`teams/${id}/profile.json`)
   return data
 }

@@ -82,7 +82,7 @@ describe('Schema', () => {
           })
         })
       })
-      test('returns a GraphQLError for missing id field', async () => {
+      test('returns a GraphQLError for missing year field', async () => {
         expect.assertions(1)
         const query = `query tournament{
           tournament{
@@ -101,6 +101,52 @@ describe('Schema', () => {
           'errors',
           expect.arrayContaining([
             expect.objectContaining(missingFieldErrorMessage({ method: 'tournament', field: 'year', type: 'Int' }))
+          ])
+        )
+      })
+    })
+    describe('team', () => {
+      test('returns a team', async () => {
+        expect.assertions(1)
+        const query = `query team{
+          team(id:"${casual.uuid}"){
+            id
+            name
+            school
+          }
+        }`
+        const { data } = await graphql(schema, query)
+        const { seed, ...teamObjectTemplateWithoutSeed } = teamObjectTemplate
+        expect(data.team).toMatchObject(teamObjectTemplateWithoutSeed)
+      })
+      test('returns a team when given a year', async () => {
+        expect.assertions(1)
+        const query = `query team{
+          team(id:"${casual.uuid}",year:${casual.year}){
+            id
+            name
+            school
+            seed
+          }
+        }`
+        const { data } = await graphql(schema, query)
+        expect(data.team).toMatchObject(teamObjectTemplate)
+      })
+      test('returns a GraphQLError for missing id field', async () => {
+        expect.assertions(1)
+        const query = `query team{
+          team{
+            id
+            name
+            school
+            seed
+          }
+        }`
+        const result = await graphql(schema, query)
+        expect(result).toHaveProperty(
+          'errors',
+          expect.arrayContaining([
+            expect.objectContaining(missingFieldErrorMessage({ method: 'team', field: 'id', type: 'ID' }))
           ])
         )
       })

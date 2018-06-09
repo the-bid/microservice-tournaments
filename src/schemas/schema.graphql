@@ -1,5 +1,6 @@
 type Query {
   tournament(year:Int!):Tournament
+  team(id:ID!,year:Int):Team
 }
 
 type Tournament @cacheControl(maxAge: 3000000){
