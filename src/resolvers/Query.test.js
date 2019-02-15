@@ -29,8 +29,8 @@ describe('Query', () => {
       const year = casual.year
       const { getTournament, getTournaments } = context.sportsRadar
       await tournament({}, { year }, context)
-      expect(getTournaments).toBeCalledWith(year)
-      expect(getTournament).toBeCalledWith(expect.any(String))
+      expect(getTournaments).toHaveBeenCalledWith(year)
+      expect(getTournament).toHaveBeenCalledWith(expect.any(String))
     })
     test('tournament returns a Tournament object', async () => {
       expect.hasAssertions()
@@ -58,15 +58,15 @@ describe('Query', () => {
       const id = casual.uuid
       await team({}, { id }, context)
       const { getTeam } = context.sportsRadar
-      expect(getTeam).toBeCalledWith(id)
+      expect(getTeam).toHaveBeenCalledWith(id)
     })
     test('team calls getTournament and getTournaments if year is provided', async () => {
       expect.assertions(2)
       const year = casual.year
       await team({}, { id: casual.uuid, year }, context)
       const { getTournaments, getTournament } = context.sportsRadar
-      expect(getTournaments).toBeCalledWith(year)
-      expect(getTournament).toBeCalledWith(expect.any(String))
+      expect(getTournaments).toHaveBeenCalledWith(year)
+      expect(getTournament).toHaveBeenCalledWith(expect.any(String))
     })
   })
 })
