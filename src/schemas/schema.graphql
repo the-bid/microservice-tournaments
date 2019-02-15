@@ -12,7 +12,7 @@ type Tournament @cacheControl(maxAge: 3000000){
   brackets: [Bracket!]!
 }
 
-enum TournamentStatus @cacheControl(maxAge: 3000000){
+enum TournamentStatus{
   CLOSED
   IN_PROGRESS
 }
