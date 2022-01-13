@@ -11,16 +11,19 @@
     "start": "nodemon -r dotenv/config src/index.js",
     "start:dev": "npm-run-all -pl start playground ",
     "start:prod": "node src/index.js",
-    "playground": "graphql playground --port 3003"
+    "playground": "graphql playground --port 3003",
+    "prepare": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "author": "bialesdaniel@gmail.com",
   "license": "MIT",
   "dependencies": {
     "apollo-engine": "^1.1.2",
-    "axios": "^0.18.0",
+    "axios": "^0.21.3",
     "graphql-iso-date": "^3.6.1",
-    "graphql-yoga": "^1.17.4",
-    "lodash": "^4.17.11"
+    "graphql-yoga": "^1.18.1",
+    "lodash": "^4.17.21",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "casual": "^1.6.0",
@@ -47,5 +50,6 @@
       "<rootDir>/test",
       "<rootDir>/src/mock-data"
     ]
-  }
+  },
+  "snyk": true
 }
